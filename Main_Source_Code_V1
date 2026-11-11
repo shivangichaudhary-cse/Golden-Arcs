@@ -109,7 +109,7 @@ class DetectiveGame:
 
     def play(self):
         """Main game loop using function mapping dispatch."""
-        print("Welcome to 'Mystery at the Manor'!")
+        print("Welcome to 'Golden arches'!")
         
         # Function dispatcher: maps inputs directly to functions
         actions = {
