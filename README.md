@@ -1,4 +1,4 @@
-# Golden-Arcs# 🕵️‍♂️ Mystery at the Manor: Text-Based Detective Engine
+# Golden-Arces# 🕵️‍♂️ A Text-Based Detective Engine
 
 A modular, Object-Oriented CLI mystery investigation game engineered with Python, dynamic lambda win-condition evaluation, and function-dispatch game loops.
 
@@ -13,7 +13,7 @@ A modular, Object-Oriented CLI mystery investigation game engineered with Python
 
 ## 📌 Project Introduction
 
-**Mystery at the Manor** is a lightweight, interactive text adventure where players act as a detective resolving a manor murder case. By searching rooms, collecting evidence into set structures, and interviewing suspects to update game state dictionaries, players must deduce the true culprit. 
+**Golden Arches** is a lightweight, interactive text adventure where players act as a detective resolving a manor murder case. By searching rooms, collecting evidence into set structures, and interviewing suspects to update game state dictionaries, players must deduce the true culprit. 
 
 Instead of relying on hardcoded `if-else` branching for victory states, the engine utilizes **higher-order functional programming** by embedding custom `lambda` logic directly within each `Suspect` object to evaluate evidence sets dynamically upon accusation.
 
@@ -33,7 +33,7 @@ Instead of relying on hardcoded `if-else` branching for victory states, the engi
 The game decouples location searching, suspect evaluation, and main loop routing across three core classes:
 
 <pre>
-Mystery at the Manor Engine
+Golden Arces Engine
  ┣ 📂 Domain Models
  ┃ ┣ Room (Location tracking, evidence retrieval, & search state)
  ┃ ┗ Suspect (Quote/trait holding & lambda condition evaluation)
@@ -77,7 +77,7 @@ Mystery at the Manor Engine
 
 ## 💡 Conclusion
 
-**Mystery at the Manor** demonstrates how combining Object-Oriented design with functional programming concepts like lambda expressions can create a clean, extensible text-engine architecture without complex dependencies.
+**Golden Arches** demonstrates how combining Object-Oriented design with functional programming concepts like lambda expressions can create a clean, extensible text-engine architecture without complex dependencies.
 
 ---
 
