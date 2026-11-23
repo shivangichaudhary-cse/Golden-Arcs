@@ -1,86 +1,183 @@
-# Golden-Arces# 🕵️‍♂️ A Text-Based Detective Engine
+# Golden Arcs
 
-A modular, Object-Oriented CLI mystery investigation game engineered with Python, dynamic lambda win-condition evaluation, and function-dispatch game loops.
+A text-based detective mystery game written in Python. Investigate five rooms, collect clues, interview suspects, and make an accusation by satisfying one suspect's evidence condition.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.8%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Architecture-OOP%20%2B%20Functional-ff69b4?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Logic-Lambda%20Evaluators-blueviolet?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Engine-CLI%20Dispatch-brightgreen?style=for-the-badge" />
-</p>
+> The complete executable source is stored in [`Main_Source_Code_V1`](Main_Source_Code_V1). It is a Python file even though it has no `.py` extension.
 
----
+## Features
 
-## 📌 Project Introduction
+- Five searchable rooms with room-specific clues and descriptions
+- Set-based clue collection that automatically prevents duplicate evidence
+- Four suspects with statements and stored traits
+- Lambda-based accusation rules
+- Stateful interview tracking
+- A menu loop driven by a function-dispatch dictionary
+- Searched-room indicators
+- No third-party dependencies
 
-**Golden Arches** is a lightweight, interactive text adventure where players act as a detective resolving a manor murder case. By searching rooms, collecting evidence into set structures, and interviewing suspects to update game state dictionaries, players must deduce the true culprit. 
+## Run the game
 
-Instead of relying on hardcoded `if-else` branching for victory states, the engine utilizes **higher-order functional programming** by embedding custom `lambda` logic directly within each `Suspect` object to evaluate evidence sets dynamically upon accusation.
+Python 3.8 or newer is required.
 
----
+```bash
+python Main_Source_Code_V1
+```
 
-## 🎯 Core Features
+On Windows, if `python` is unavailable, try:
 
-- **Dynamic Lambda Win-Conditions:** Each suspect encapsulates a functional rule evaluation taking active `clues` (Set) and `interviewed` (Dict) state frames to determine guilt seamlessly.
-- **Set & Dictionary State Management:** Instant $O(1)$ clue tracking and suspect trait indexing eliminate duplicate evidence while keeping track of interviewed leads.
-- **Function Dispatcher Loop:** Replaces traditional conditional menu loops with a dynamic function-mapping dictionary dispatch table.
-- **Stateful Room Tracking:** Visual status updates mark explored locations to streamline player navigation.
+```bash
+py Main_Source_Code_V1
+```
 
----
+## How to play
 
-## 🧠 System Architecture
+1. Choose **Search a room** and enter a room number.
+2. Read the descriptions and collect the room's clues.
+3. Choose **Interview a suspect** to view a statement and record that suspect's trait.
+4. Choose **Make an accusation** and select a suspect.
+5. The game ends after the accusation, whether it succeeds or fails.
 
-The game decouples location searching, suspect evaluation, and main loop routing across three core classes:
+## Game flow
 
-<pre>
-Golden Arces Engine
- ┣ 📂 Domain Models
- ┃ ┣ Room (Location tracking, evidence retrieval, & search state)
- ┃ ┗ Suspect (Quote/trait holding & lambda condition evaluation)
- ┣ 📂 Game Engine
- ┃ ┗ DetectiveGame (Master engine initializing rooms, suspects, & state)
- ┗ 📂 Control Tier
-   ┣ search_room() (Evidence set updates)
-   ┣ interview_suspect() (State dict updates)
-   ┣ make_accusation() (Triggers suspect.evaluate lambda)
-   ┗ play() (Dictionary-driven execution loop)
-</pre>
+```mermaid
+flowchart TD
+    A[Run Main_Source_Code_V1] --> B[DetectiveGame created]
+    B --> C{Game is running?}
+    C -- Yes --> D[Display main menu]
+    D --> E{Enter choice}
 
-> [!NOTE]
-> The engine uses pure Python native data structures, requiring zero external package installation to run.
+    E -- 1 --> F[Search a room]
+    F --> G[Select room]
+    G --> H[Room.search]
+    H --> I[Add clues to self.clues set]
+    I --> C
 
----
+    E -- 2 --> J[Interview a suspect]
+    J --> K[Select suspect]
+    K --> L[Suspect.interview]
+    L --> M[Record trait in interviewed dictionary]
+    M --> C
 
-## 💻 System Requirements
+    E -- 3 --> N[Make an accusation]
+    N --> O[Select suspect]
+    O --> P[Call Suspect.evaluate]
+    P --> Q{Lambda condition passes?}
+    Q -- Yes --> R[Print confession and win]
+    Q -- No --> S[Print insufficient evidence]
+    R --> T[Set is_running to False]
+    S --> T
 
-- **Environment & OS:** Cross-platform compatible with Windows 10/11, macOS, or Linux.
-- **Runtime:** Python 3.8 or higher.
-- **Execution:** Run directly via terminal using `python detective.py`.
+    C -- No --> U[Exit program]
+```
 
----
+## Source structure
 
-## 🕹️ How to Play
+```mermaid
+classDiagram
+    class Room {
+        +name: str
+        +clues: list
+        +descriptions: list
+        +searched: bool
+        +search() list
+    }
 
-1. **Search Rooms:** Explore locations like *The Study*, *The Library*, or *The Kitchen* to gather clues into your evidence set.
-2. **Interview Suspects:** Question *The Butler*, *The Maid*, *The Gardener*, or *The Chef* to gather traits and record interviews.
-3. **Make an Accusation:** Select a suspect. If your gathered evidence matches their unique lambda condition, they confess and you win the case!
+    class Suspect {
+        +name: str
+        +key_name: str
+        +quote: str
+        +trait: str
+        +win_condition
+        +interview() str
+        +evaluate(clues, state) bool
+    }
 
----
+    class DetectiveGame {
+        +clues: set
+        +interviewed: dict
+        +is_running: bool
+        +rooms: dict
+        +suspects: dict
+        +search_room()
+        +interview_suspect()
+        +make_accusation()
+        +play()
+    }
 
-## 🔮 Future Enhancements
+    DetectiveGame *-- Room : rooms dictionary
+    DetectiveGame *-- Suspect : suspects dictionary
+    Suspect ..> DetectiveGame : receives clues and state
+```
 
-- **Procedural Case Generation:** Randomize clues, murder weapons, and suspect lambda conditions per run.
-- **Turn Counter / Limited Moves:** Introduce time constraints to raise difficulty and strategic choice.
-- **Save / Load Game State:** Serialize game state dictionaries using JSON or Pickle.
+## Rooms and clues
 
----
+| Choice | Room | Clues found |
+|---|---|---|
+| 1 | The Study | `letter`, `vase`, `diary` |
+| 2 | The Library | `hidden passage`, `poison book` |
+| 3 | The Kitchen | `missing knife`, `footprint` |
+| 4 | The Garden | `bloody glove`, `trampled flowers` |
+| 5 | The Bedroom | `fabric`, `debts` |
 
-## 💡 Conclusion
+Each room can be searched repeatedly. `Room.search()` sets `searched = True` and still returns the room's clues each time, while `DetectiveGame.clues` remains a set so duplicate clues are not added.
 
-**Golden Arches** demonstrates how combining Object-Oriented design with functional programming concepts like lambda expressions can create a clean, extensible text-engine architecture without complex dependencies.
+## Accusation conditions
 
----
+Accusations succeed only when the selected suspect's lambda condition evaluates to `True`.
 
-<div align="center">
-  <sub>Engineered by <b>shivangichaudhary-cse</b> • INTJ/ENTP Core Software Design</sub>
-</div>
+| Suspect | Required evidence or state |
+|---|---|
+| The Butler | Clue `fabric` |
+| The Maid | Clues `missing knife` and `footprint` |
+| The Gardener | Clues `bloody glove` and `trampled flowers` |
+| The Chef | Clue `poison book` and key `chef` in the interviewed state |
+
+The Chef can be considered guilty by finding `poison book` and interviewing the Chef. Interviewing the Chef stores `alibi for maid` under the key `chef` in `self.interviewed`.
+
+```mermaid
+flowchart LR
+    A[Select accusation] --> B[Suspect.evaluate]
+    B --> C{Which suspect?}
+    C -- Butler --> D["fabric in clues"]
+    C -- Maid --> E["missing knife and footprint in clues"]
+    C -- Gardener --> F["bloody glove and trampled flowers in clues"]
+    C -- Chef --> G["poison book in clues and chef in interviewed"]
+    D --> H[Win or fail]
+    E --> H
+    F --> H
+    G --> H
+```
+
+## Internal state
+
+```mermaid
+stateDiagram-v2
+    [*] --> Initial
+    Initial --> Searching: choice 1
+    Searching --> Initial: clues added
+    Initial --> Interviewing: choice 2
+    Interviewing --> Initial: trait recorded
+    Initial --> Accusing: choice 3
+    Accusing --> Finished: accusation evaluated
+    Finished --> [*]
+```
+
+The game maintains these core state structures:
+
+- `clues`: a set of discovered clue names
+- `interviewed`: a dictionary mapping suspect keys to traits
+- `is_running`: controls whether the main loop continues
+- `rooms`: a dictionary mapping menu choices to `Room` objects
+- `suspects`: a dictionary mapping menu choices to `Suspect` objects
+
+## Project files
+
+| File | Purpose |
+|---|---|
+| [`Main_Source_Code_V1`](Main_Source_Code_V1) | Complete game implementation |
+| [`README.md`](README.md) | Project documentation |
+| [`LICENSE`](LICENSE) | MIT license |
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
