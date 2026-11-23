@@ -320,28 +320,6 @@ Invalid choice. Pick 1, 2, or 3.
 
 The game remains running and displays the menu again.
 
-## Run the game
-
-Python 3.8 or newer is required.
-
-```bash
-python Main_Source_Code_V1
-```
-
-On Windows, if `python` is unavailable, try:
-
-```bash
-py Main_Source_Code_V1
-```
-
-## How to play
-
-1. Choose **Search a room** and enter a room number.
-2. Read the descriptions and collect the room's clues.
-3. Choose **Interview a suspect** to view a statement and record that suspect's trait.
-4. Choose **Make an accusation** and select a suspect.
-5. The game ends after the accusation, whether it succeeds or fails.
-
 ## Game flow
 
 ```mermaid
@@ -429,15 +407,6 @@ Each room can be searched repeatedly. `Room.search()` sets `searched = True` and
 ## Accusation conditions
 
 Accusations succeed only when the selected suspect's lambda condition evaluates to `True`.
-
-| Suspect | Required evidence or state |
-|---|---|
-| The Butler | Clue `fabric` |
-| The Maid | Clues `missing knife` and `footprint` |
-| The Gardener | Clues `bloody glove` and `trampled flowers` |
-| The Chef | Clue `poison book` and key `chef` in the interviewed state |
-
-The Chef can be considered guilty by finding `poison book` and interviewing the Chef. Interviewing the Chef stores `alibi for maid` under the key `chef` in `self.interviewed`.
 
 ```mermaid
 flowchart LR
